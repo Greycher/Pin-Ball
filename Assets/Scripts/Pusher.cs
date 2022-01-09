@@ -2,56 +2,24 @@
 using UnityEngine;
 
 namespace PinBall {
-    public class Pusher : MonoBehaviour {
-        [SerializeField] private Rigidbody _body;
-        [SerializeField] private HingeJoint _hingeJoint;
-        // [SerializeField] private Vector3 _initialAngles;
-        // [SerializeField] private Vector3 _finalAngles;
-        [SerializeField] private KeyCode _keyCode;
-        [SerializeField] private float _targetVelocity;
+    public class Pusher : MonoBehaviour{
+        [SerializeField] private float _force = 1000f;
+        [SerializeField] private float _coolDown = 0.6f;
 
-        private float _val;
-
+        private float _timer;
+        
         private void Update() {
-            var motor = _hingeJoint.motor;
-            motor.targetVelocity = _targetVelocity * (Input.GetKey(_keyCode) ? 1f : -1f);
-            _hingeJoint.motor = motor;
-            // if (Input.GetKey(_keyCode)) {
-            //     // _val += _speed * Time.deltaTime;
-            // }
-            // else {
-            //     // _val -= _speed * Time.deltaTime;
-            // }
-            // // _val = Mathf.Clamp(_val, 0, 1);
+            _timer -= Time.deltaTime;
         }
 
-        // private void FixedUpdate() {
-        //     var targetAngles = Vector3.Lerp(_initialAngles, _finalAngles, _val);
-        //     var targetRot = Quaternion.Euler(targetAngles);
-        //     _body.centerOfMass = Vector3.zero;
-        //     // _body.MoveRotation(targetRot);
-        //     var rot = transform.rotation;
-        //     var rotateDiff = Quaternion.Inverse(rot) * targetRot;
-        //     Debug.Log($"rotate diff angles: {rotateDiff.eulerAngles}");
-        //     _body.angularVelocity = rotateDiff.eulerAngles / Time.deltaTime *  Mathf.Deg2Rad;
-        // }
-
-        // private Vector3 JustifyAngle(Vector3 angles) {
-        //     return new Vector3(
-        //         JustifyAngle(angles.x),
-        //         JustifyAngle(angles.y),
-        //         JustifyAngle(angles.z));
-        // }
-        //
-        // private float JustifyAngle(float angle) {
-        //     while (angle > 360) {
-        //         angle -= 360;
-        //     }
-        //     while (angle < 0) {
-        //         angle += 360;
-        //     }
-        //
-        //     return angle;
-        // }
+        private void OnCollisionEnter(Collision other) {
+            if (_timer <= 0) {
+                var body = other.rigidbody;
+                var bodyPos = body.transform.position;
+                var collPos = other.contacts[0].point;
+                body.AddForce((bodyPos - collPos).normalized * _force, ForceMode.Impulse);
+                _timer = _coolDown;
+            }
+        }
     }
 }
