@@ -3,10 +3,7 @@ using UnityEngine;
 
 namespace PinBall {
     public class Arm : MonoBehaviour {
-        [SerializeField] private Rigidbody _body;
         [SerializeField] private HingeJoint _hingeJoint;
-        // [SerializeField] private Vector3 _initialAngles;
-        // [SerializeField] private Vector3 _finalAngles;
         [SerializeField] private KeyCode _keyCode;
         [SerializeField] private float _targetVelocity;
 
