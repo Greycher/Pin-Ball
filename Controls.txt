@@ -1,0 +1,2 @@
+down arrow key for launch spring
+left and right arrow keys for arms
