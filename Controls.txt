@@ -1,2 +1,7 @@
+First Trial
+Space for launch
+left and right arrow keys for arms
+
+Second Trial
 down arrow key for launch spring
 left and right arrow keys for arms
